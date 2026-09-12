@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import Interactive from '../components/Interactive';
 import { useApp } from '../lib/AppContext';
 import { DOWFULL, GOLD, INK } from '../lib/constants';
+import { setPassphrase, verifyPassphrase } from '../lib/auth';
 
 const REMINDER_DEFS = [
   ['high', 'Don’t forget your High Priority task.'],
@@ -13,9 +15,41 @@ const SHORTCUTS = [
   ['A', 'Analytics'], ['G', 'Calendar grid'], ['Esc', 'Close modal'],
 ];
 
+const inputStyle = { border: '1px solid #d7d3d3', padding: '8px 10px', fontSize: 13, background: '#fff', color: INK, width: '100%' };
+
+function LockCard({ say }) {
+  const [current, setCurrent] = useState('');
+  const [next, setNext] = useState('');
+  const [confirm, setConfirm] = useState('');
+
+  const submit = async (e) => {
+    e.preventDefault();
+    const ok = await verifyPassphrase(current);
+    if (!ok) { say('Current passphrase is not correct.'); return; }
+    if (next.trim().length < 4) { say('New passphrase needs at least 4 characters.'); return; }
+    if (next !== confirm) { say('New passphrase and confirmation don’t match.'); return; }
+    await setPassphrase(next);
+    setCurrent(''); setNext(''); setConfirm('');
+    say('Passphrase updated.');
+  };
+
+  return (
+    <div style={{ border: '1px solid #d7d3d3', padding: 20 }}>
+      <h3 style={{ fontSize: 14, letterSpacing: '.14em', textTransform: 'uppercase', margin: '0 0 6px' }}>Lock</h3>
+      <div style={{ fontSize: 12, color: '#9b9797', marginBottom: 14 }}>Change the passphrase required to open this tracker on this device.</div>
+      <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <Interactive as="input" type="password" placeholder="Current passphrase" value={current} onChange={(e) => setCurrent(e.target.value)} style={inputStyle} focusStyle={{ borderColor: GOLD }} />
+        <Interactive as="input" type="password" placeholder="New passphrase" value={next} onChange={(e) => setNext(e.target.value)} style={inputStyle} focusStyle={{ borderColor: GOLD }} />
+        <Interactive as="input" type="password" placeholder="Confirm new passphrase" value={confirm} onChange={(e) => setConfirm(e.target.value)} style={inputStyle} focusStyle={{ borderColor: GOLD }} />
+        <Interactive as="button" type="submit" style={{ cursor: 'pointer', padding: '8px 14px', background: GOLD, fontWeight: 700, fontSize: 13, marginTop: 4 }} hoverStyle={{ background: 'var(--color-accent-400)' }}>Update passphrase</Interactive>
+      </form>
+    </div>
+  );
+}
+
 export default function Settings() {
   const ctx = useApp();
-  const { data, freeDay, patch, exportData, importData, resetData, setFreeDay, chip } = ctx;
+  const { data, freeDay, patch, exportData, importData, resetData, setFreeDay, chip, say } = ctx;
 
   const reminders = REMINDER_DEFS.map(([key, label]) => {
     const on = !!(data.reminders || {})[key];
@@ -64,6 +98,7 @@ export default function Settings() {
             ))}
           </div>
         </div>
+        <LockCard say={say} />
         <div style={{ border: '1px solid #d7d3d3', padding: 20 }}>
           <h3 style={{ fontSize: 14, letterSpacing: '.14em', textTransform: 'uppercase', margin: '0 0 14px' }}>Keyboard</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

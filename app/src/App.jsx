@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { AppProvider, useApp } from './lib/AppContext';
+import LockScreen from './components/LockScreen';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import SearchResults from './components/SearchResults';
@@ -52,6 +54,8 @@ function Shell() {
 }
 
 export default function App() {
+  const [unlocked, setUnlocked] = useState(false);
+  if (!unlocked) return <LockScreen onUnlock={() => setUnlocked(true)} />;
   return (
     <AppProvider>
       <Shell />

@@ -1,13 +1,19 @@
 {
-  "name": "app",
+  "name": "tracker135",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "A local-first 1-3-5 daily task, habit, and challenge tracker.",
+  "author": "Ziad Hossam",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "electron": "electron .",
+    "electron:dev": "ELECTRON_START_URL=http://localhost:5173 electron .",
+    "dist:electron": "vite build && electron-builder"
   },
   "dependencies": {
     "react": "^19.2.8",
@@ -17,7 +23,38 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
+    "electron": "^44.3.0",
+    "electron-builder": "^26.15.3",
     "oxlint": "^1.81.0",
     "vite": "^8.3.0"
+  },
+  "build": {
+    "appId": "com.tracker135.app",
+    "productName": "1-3-5 Tracker",
+    "publish": null,
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Utility"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.productivity"
+    }
   }
 }
