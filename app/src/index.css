@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --color-accent: #c9a227;
+  --color-accent-100: #faf4e2;
+  --color-accent-200: #f2e6c2;
+  --color-accent-300: #e6d190;
+  --color-accent-400: #d8b855;
+  --color-accent-500: #c9a227;
+  --color-accent-600: #a8851c;
+  --color-accent-700: #856914;
+  --color-accent-800: #5e4a0e;
+  --gold: #c9a227;
+  --gold-deep: #856914;
+  --ink: #201e1d;
+  --ok: #3f7d4f;
+  --bad: #a33a28;
+  --shadow-lg: 0 12px 32px rgba(45, 43, 43, 0.22);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #ffffff;
+  color: var(--ink);
+  font-family: 'Archivo', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--gold-deep); }
+a:hover { color: var(--ink); }
+
+input, textarea, button, select {
+  font-family: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  text-align: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: #d7d3d3; }
+
+@keyframes pop {
+  0% { transform: scale(0.7); opacity: 0; }
+  60% { transform: scale(1.12); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes badge {
+  0% { transform: scale(0.4) rotate(-12deg); opacity: 0; }
+  70% { transform: scale(1.15) rotate(3deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
